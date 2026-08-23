@@ -650,6 +650,15 @@ bool MathStructure::polynomialDivide(const MathStructure &mnum, const MathStruct
 	return false;
 }
 
+bool contains_power_by_zero(const MathStructure &m, const MathStructure &x_var) {
+	if(m.isPower() && m[1].isZero() && m.contains(x_var)) return true;
+	if(!m.isAddition() && !m.isMultiplication()) return false;
+	for(size_t i = 0; i < m.size(); i++) {
+		if(contains_power_by_zero(m[i], x_var)) return true;
+	}
+	return false;
+}
+
 bool divide_in_z(const MathStructure &mnum, const MathStructure &mden, MathStructure &mquotient, const sym_desc_vec &sym_stats, size_t var_i, const EvaluationOptions &eo) {
 
 	mquotient.clear();
@@ -703,6 +712,7 @@ bool divide_in_z(const MathStructure &mnum, const MathStructure &mden, MathStruc
 
 	while(numdeg.isGreaterThanOrEqualTo(dendeg)) {
 		if(CALCULATOR->aborted()) return false;
+		if(contains_power_by_zero(mrem, xvar)) return false;
 		MathStructure numcoeff;
 		mrem.coefficient(xvar, numdeg, numcoeff);
 		MathStructure term;
