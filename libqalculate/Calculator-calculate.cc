@@ -2921,11 +2921,11 @@ string Calculator::parseToExpression(string to_str, EvaluationOptions &evalops, 
 					if(to_str[0] == 'a') {
 						printops.use_all_prefixes = true;
 					} else if(to_str[0] == 'd') {
-						if(*binary_prefixes) *binary_prefixes = 0;
+						if(binary_prefixes) *binary_prefixes = 0;
 					}
 				} else if(to_str.length() > 1 && to_str[1] == '?' && to_str[0] == 'b') {
 					// b? in front of unit expression: use binary prefixes
-					if(*binary_prefixes) *binary_prefixes = 2;
+					if(binary_prefixes) *binary_prefixes = 2;
 				}
 				// expression after "to" is by default interpreted as unit expression
 				if(!str_conv.empty()) str_conv += " to ";
